@@ -1,6 +1,7 @@
 # Search Engine Documentation
 
-## Nasywa Kamila Az Zahra - 2206083060
+## Nama: Nasywa Kamila Az Zahra 
+## NPM: 2206083060
 
 ## Overview
 
@@ -32,7 +33,7 @@ Ranks documents using term frequency inverse document frequency. The query strin
 Implements the BM25 ranking function with parameters k1=1.2 and b=0.75. It uses document length normalisation and saturating term frequency. The system retrieves the average document length (avg_doc_len) from the index metadata. For IDF calculation, uses a specific BM25 IDF: log((N - df + 0.5) / (df + 0.5)). The b = 0.75 parameter ensures that if a document is much longer than the average.
 
 **6. WAND for BM25**
-It maintains per term upper bounds and skips large ranges of documents whose maximum possible score is below the current threshold. 
+For each distinct term in the query, WAND compute its IDF using the standard BM25 formula. Then, it retrieve the term's postings list (document IDs) and term frequency list from the index. WAND then determine an upper bound for the term’s contribution to any document score. It will finally store the term’s data in a list term_data, including the postings list, TF list, a pointer (ptr) to the current position in the postings list, and the upper bound. The algorithm will repeatedly performs term sorting, finding the smallest index, compute the sum of upper bounds for terms up to and including the pivot. If ub_sum <= threshold, then no document with document ID ≤ pivot_doc can achieve a score higher than the current threshold. Therefore, we advance all pointers for terms that have current docID ≤ pivot_doc to the next docID greater than pivot_doc (using binary search), compute the full BM25 score for the document pivot_doc, store it in the scores dictionary (if the computed score is positive), and set the threshold to the k‑th largest score among the accumulated scores (if collected at least k score). After the loop, the scores dictionary contains only the documents that were evaluated.
 
 ## How to Run the Program
 
